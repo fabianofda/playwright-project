@@ -1,0 +1,11 @@
+
+# Playwright
+node_modules/
+apps/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Ignore artifacts
+config.md
