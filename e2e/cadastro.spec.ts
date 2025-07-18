@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test'
-
 import { getCadastroPage } from '../support/pages/cadastroPage'
 import { getDashboardPage } from '../support/pages/dashboardPage'
-
 import { getToast } from '../support/pages/components/toast'
 import { getWarning } from '../support/pages/components/warning'
+import { IFields } from '../support/fixtures/IFields'
+import { Fields } from '../support/fixtures/Fields'
 
 test(' deve realiza cadastro com sucesso', async ({ page }) => {
 
@@ -12,15 +12,7 @@ test(' deve realiza cadastro com sucesso', async ({ page }) => {
   const dashboardPage = getDashboardPage(page)
   const toast = getToast(page)
 
-  const name = `teste_${Math.floor(Math.random() * 10000)}`
-  
-  const data = {
-    nome: name,
-    username: name,
-    email: name + '@teste.ai',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().success
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -39,15 +31,7 @@ test('deve validar quando as senhas nao coicidirem', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const nome = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    nome: nome,
-    username: nome,
-    email: nome + '@teste.ai',
-    senha: 'teste123',
-    confirmaSenha: 'teste321'
-  }
+  const data: IFields = Fields().passwordMismatch
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -61,15 +45,7 @@ test('deve validar quando as senhas for muito curta', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const nome = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    nome: nome,
-    username: nome,
-    email: nome + '@teste.ai',
-    senha: 'teste',
-    confirmaSenha: 'teste'
-  }
+  const data: IFields = Fields().shortPassword
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -83,14 +59,7 @@ test('deve validar quando campo como voce gostaria de ser chamado? nao for infor
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const nome = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    username: nome,
-    email: nome + '@teste.ai',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().emptyName
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -104,14 +73,7 @@ test('deve validar quando campo escolha um username unico nao for informado', as
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const nome = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    nome: nome,
-    email: nome + '@teste.ai',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().emptyUsername
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -125,15 +87,7 @@ test('deve validar quando campo username for invalido', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const nome = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    nome: nome,
-    username: 't!-s-t#',
-    email: nome + '@teste.ai',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().invalidUsername
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -147,12 +101,7 @@ test('deve validar quando campo seu melhor email nao for informado', async ({ pa
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data = {
-    nome: 'teste',
-    username: 'teste',
-    senha: 'teste111',
-    confirmaSenha: 'teste111'
-  }
+  const data: IFields = Fields().emptyEmail
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -166,12 +115,7 @@ test('deve validar campos obrigatorios', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data = {
-    nome: '',
-    username: '',
-    senha: '',
-    confirmaSenha: ''
-  }
+  const data: IFields = Fields().allFieldsEmpty
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -185,15 +129,7 @@ test('deve validar quando email ja existir', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const nome = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    nome: nome,
-    username: nome,
-    email: 'fabianofda@linkai.com',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().existingEmail
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -207,15 +143,7 @@ test('deve validar quando username ja existir', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const mail = `teste_${Math.floor(Math.random() * 10000)}`
-
-  const data = {
-    nome: 'fabianofda',
-    username: 'fabianofda',
-    email: mail + '@teste.ai',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().existingUsername
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -229,13 +157,7 @@ test('deve validar quando campo email for invalido', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const warning = getWarning(page)
 
-  const data = {
-    nome: 'ttesste',
-    username: 'ttesste',
-    email: 'teste',
-    senha: 'teste123',
-    confirmaSenha: 'teste123'
-  }
+  const data: IFields = Fields().invalidEmail
 
   await cadastroPage.open()
   await cadastroPage.register(data)

@@ -1,18 +1,19 @@
 import { Page } from '@playwright/test'
+import { User } from '../fixtures/IUser'
 
 export function getLoginPage(page: Page) {
     return {
         open: async () => {
             await page.goto('http://localhost:3000/login')
         },
-        logInWith: async (username: string, password: string) => {
+        logInWith: async (user: User) => {
             await page
                 .getByRole('textbox', { name: 'Seu @username incrível' })
-                .fill(username)
+                .fill(user.username)
 
             await page
                 .getByRole('textbox', { name: 'Digite sua senha secreta' })
-                .fill(password)
+                .fill(user.password)
 
             await page
                 .getByRole('button', { name: 'Entrar' })
