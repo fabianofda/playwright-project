@@ -3,8 +3,7 @@ import { getCadastroPage } from '../support/pages/cadastroPage'
 import { getDashboardPage } from '../support/pages/dashboardPage'
 import { getToast } from '../support/pages/components/toast'
 import { getWarning } from '../support/pages/components/warning'
-import { IFields } from '../support/fixtures/IFields'
-import { Fields } from '../support/fixtures/Fields'
+import { Register, Registers } from '../support/fixtures/Register'
 
 test(' deve realiza cadastro com sucesso', async ({ page }) => {
 
@@ -12,7 +11,7 @@ test(' deve realiza cadastro com sucesso', async ({ page }) => {
   const dashboardPage = getDashboardPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().success
+  const data: Register = Registers.success
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -31,7 +30,7 @@ test('deve validar quando as senhas nao coicidirem', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().passwordMismatch
+  const data: Register = Registers.passwordMismatch
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -45,7 +44,7 @@ test('deve validar quando as senhas for muito curta', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().shortPassword
+  const data: Register = Registers.shortPassword
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -59,7 +58,7 @@ test('deve validar quando campo como voce gostaria de ser chamado? nao for infor
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().emptyName
+  const data: Register = Registers.emptyName
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -73,7 +72,7 @@ test('deve validar quando campo escolha um username unico nao for informado', as
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().emptyUsername
+  const data: Register = Registers.emptyUsername
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -87,7 +86,7 @@ test('deve validar quando campo username for invalido', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().invalidUsername
+  const data: Register = Registers.invalidUsername
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -101,7 +100,7 @@ test('deve validar quando campo seu melhor email nao for informado', async ({ pa
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().emptyEmail
+  const data: Register = Registers.emptyEmail
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -115,7 +114,7 @@ test('deve validar campos obrigatorios', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().allFieldsEmpty
+  const data: Register = Registers.allFieldsEmpty
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -129,7 +128,7 @@ test('deve validar quando email ja existir', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().existingEmail
+  const data: Register = Registers.existingEmail
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -143,7 +142,7 @@ test('deve validar quando username ja existir', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const toast = getToast(page)
 
-  const data: IFields = Fields().existingUsername
+  const data: Register = Registers.existingUsername
 
   await cadastroPage.open()
   await cadastroPage.register(data)
@@ -157,7 +156,7 @@ test('deve validar quando campo email for invalido', async ({ page }) => {
   const cadastroPage = getCadastroPage(page)
   const warning = getWarning(page)
 
-  const data: IFields = Fields().invalidEmail
+  const data: Register = Registers.invalidEmail
 
   await cadastroPage.open()
   await cadastroPage.register(data)

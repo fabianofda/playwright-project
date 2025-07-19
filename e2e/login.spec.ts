@@ -2,9 +2,7 @@ import { test, expect } from '@playwright/test'
 import { getDashboardPage } from '../support/pages/dashboardPage'
 import { getLoginPage } from '../support/pages/loginPage'
 import { getToast } from '../support/pages/components/toast'
-import { User } from '../support/fixtures/IUser'
-import Users from '../support/fixtures/Users.json'
-
+import { User, Users } from '../support/fixtures/User'
 
 test('deve logar com sucesso', async ({ page }) => {
     const loginPage = getLoginPage(page)
