@@ -1,5 +1,5 @@
 import { Page, expect } from "@playwright/test"
-import { UserSignup } from "../fixtures/Users"
+import { User } from "../fixtures/Users"
 
 export function getSignupPage(page: Page) {
 
@@ -11,12 +11,12 @@ export function getSignupPage(page: Page) {
         open: async () => {
             await page.goto('http://localhost:3000/cadastro')
         },
-        register: async (data: UserSignup) => {
+        register: async (data: User) => {
             await page.getByRole('textbox', { name: 'Como você gostaria de ser' }).fill(data.name)
             await page.getByRole('textbox', { name: 'Escolha um @username único (ex: papitotechqa)' }).fill(data.username)
             await emailField().fill(data.email)
-            await page.getByRole('textbox', { name: 'Crie uma senha secreta e' }).fill(data.senha)
-            await page.getByRole('textbox', { name: 'Repita sua senha para' }).fill(data.confirmaSenha)
+            await page.getByRole('textbox', { name: 'Crie uma senha secreta e' }).fill(data.password)
+            await page.getByRole('textbox', { name: 'Repita sua senha para' }).fill(data.confirmapassword)
         },
         submit: async () => {
             await page.getByRole('button', { name: 'Criar conta' }).click()

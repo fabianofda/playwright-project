@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-
 import { getHomePage } from '../support/pages/homePage'
 
 test('deve validar o título da pagina', async ({ page }) => {
