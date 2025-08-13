@@ -3,28 +3,40 @@ import bcrypt from "bcryptjs"
 
 const client = new MongoClient('mongodb://localhost:27017/linkai')
 
+export async function removeLinks(domain: string) {
+
+    await client.connect()
+
+    const result = await client
+        .db()
+        .collection('links')
+        .deleteMany({ url: { $regex: domain, $options: 'i' }})
+
+    return result.deletedCount
+}
+
 export async function removeUserByEmail(email: string) {
 
     await client.connect()
 
-    const result = client
+    const result = await client
         .db()
         .collection('users')
         .deleteMany({ email: email })
 
-    return (await result).deletedCount
+    return result.deletedCount
 }
 
 export async function removeUserByUserName(username: string) {
 
     await client.connect()
 
-    const result = client
+    const result = await client
         .db()
         .collection('users')
         .deleteMany({ username: username })
 
-    return (await result).deletedCount
+    return result.deletedCount
 }
 
 
@@ -39,12 +51,12 @@ export async function insertUser(user: any) {
         password: hashPass
     }
 
-    const result = client
+    const result = await client 
         .db()
         .collection('users')
         .insertOne(userWithHashPass)
 
-    return (await result).insertedId
+    return result.insertedId
 
 }
 

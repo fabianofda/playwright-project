@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test'
-import { getHomePage } from '../support/pages/homePage'
+import { getAuthActions} from '../support/actions/auth'
 
 test('deve validar o título da pagina', async ({ page }) => {
-  const homePage = getHomePage(page)
+  const homePage = getAuthActions(page)
 
   await homePage.open()
 

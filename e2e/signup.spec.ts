@@ -1,199 +1,161 @@
 import { test, expect } from '@playwright/test'
-import { getSignupPage } from '../support/pages/SignupPage'
-import { getDashboardPage } from '../support/pages/DashboardPage'
-import { getToast } from '../support/pages/components/Toast'
-import { getWarning } from '../support/pages/components/Warning'
-import { User, getNewUser, getDuplicateUser } from '../support/fixtures/Users'
+import { getAuthActions } from '../support/actions/auth'
+import { getToast } from '../support/actions/components/toast'
+import { User, getNewUser, getDuplicateUser } from '../support/fixtures/users'
 import { removeUserByEmail, insertUser, removeUserByUserName } from '../support/database'
 
 const user: User = getNewUser()
 
 test(' deve realiza cadastro com sucesso', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
-  const dashboardPage = getDashboardPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
   await removeUserByEmail(user.email)
 
-  await signupPage.open()
-  await signupPage.register(user)
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm(user)
+  await auth.submitSignupForm()
+  await auth.verifyUserLogin(user)
 
-
-  expect(dashboardPage.welcome(`Olá, ${user.name}! 👋`)).toBeVisible()
-
-  expect(await toast.getMessage())
-    .toContain('Conta criada com sucesso!')
-
-  expect(await toast.getMessage())
-    .toContain('Bem-vindo ao Linkaí. Agora você pode criar seu perfil.')
+  await toast.getMessage('Conta criada com sucesso!')
+  await toast.getMessage('Bem-vindo ao Linkaí. Agora você pode criar seu perfil.')
 })
 
 test('deve validar quando as senhas nao coicidirem', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, confirmapassword: '123456' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, confirmapassword: '123456' })
+  await auth.submitSignupForm()
 
-
-  expect(await toast.getMessage())
-    .toContain('A confirmação de senha deve ser igual à senha.')
+  await toast.getMessage('A confirmação de senha deve ser igual à senha.')
 })
 
 test('deve validar quando as senhas for muito curta', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, password: '123' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, password: '123' })
+  await auth.submitSignupForm()
 
-
-  expect(await toast.getMessage())
-    .toContain('A senha deve ter pelo menos 6 caracteres.')
+  await toast.getMessage('A senha deve ter pelo menos 6 caracteres.')
 })
 
 test('deve validar quando campo como voce gostaria de ser chamado? nao for informado', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, name: '' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, name: '' })
+  await auth.submitSignupForm()
 
-
-  expect(await toast.getMessage())
-    .toContain('Por favor, preencha todos os campos.')
+  await toast.getMessage('Por favor, preencha todos os campos.')
 })
 
 test('deve validar quando campo escolha um username unico nao for informado', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, username: '' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, username: '' })
+  await auth.submitSignupForm()
 
-  expect(await toast.getMessage())
-    .toContain('Por favor, preencha todos os campos.')
+  await toast.getMessage('Por favor, preencha todos os campos.')
 })
 
 test('deve validar quando campo username for invalido', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, username: 'fabiano fda' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, username: 'fabiano fda' })
+  await auth.submitSignupForm()
 
-
-  expect(await toast.getMessage())
-    .toContain('O username deve conter apenas letras, números e underscores.')
+  await toast.getMessage('O username deve conter apenas letras, números e underscores.')
 })
 
 test('deve validar quando campo seu melhor email nao for informado', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, email: '' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, email: '' })
+  await auth.submitSignupForm()
 
-
-  expect(await toast.getMessage())
-    .toContain('Por favor, preencha todos os campos.')
+  await toast.getMessage('Por favor, preencha todos os campos.')
 })
 
 test('deve validar campos obrigatorios', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.submitSignupForm()
 
-  expect(await toast.getMessage())
-    .toContain('Por favor, preencha todos os campos.')
+  await toast.getMessage('Por favor, preencha todos os campos.')
 })
 
 test('nao deve cadastrar quando email ja estiver em uso', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
   const data: User = getDuplicateUser()
   await removeUserByEmail(data.email)
   await insertUser(data)
 
-  await signupPage.open()
-  await signupPage.register({ ...data, username: 'novoUsername' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...data, username: 'novoUsername' })
+  await auth.submitSignupForm()
 
-  expect(await toast.getMessage())
-    .toContain('Oops!Parece que esse e-mail ou nome de usuário já foi cadastrado. Tente outro, por favor.')
+  await toast.getMessage('Parece que esse e-mail ou nome de usuário já foi cadastrado. Tente outro, por favor.')
 })
 
 test('nao deve cadastrar quando username ja estiver em uso', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
   const data: User = getDuplicateUser()
   await removeUserByUserName(data.username)
   await insertUser(data)
 
-  await signupPage.open()
-  await signupPage.register({ ...data, email: 'novo@novo.com' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...data, email: 'novo@novo.com' })
+  await auth.submitSignupForm()
 
-  expect(await toast.getMessage())
-    .toContain('Oops!Parece que esse e-mail ou nome de usuário já foi cadastrado. Tente outro, por favor.')
+  await toast.getMessage('Parece que esse e-mail ou nome de usuário já foi cadastrado. Tente outro, por favor.')
 })
 
 test('deve validar quando campo email for invalido', async ({ page }) => {
+  const auth = getAuthActions(page)
 
-  const signupPage = getSignupPage(page)
-  const warning = getWarning(page)
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, email: 'teste' })
+  await auth.submitSignupForm()
 
-  await signupPage.open()
-  await signupPage.register({ ...user, email: 'teste' })
-  await signupPage.submit()
-
-
-  expect(await warning.getEmailFieldBrowserAlertMessage())
+  expect(await auth.getEmailFieldBrowserAlertMessage())
     .toBe(`Please include an '@' in the email address. 'teste' is missing an '@'.`)
 })
 
 test('deve validar quando o tipo do campo for "email".', async ({ page }) => {
+  const auth = getAuthActions(page)
 
-  const signupPage = getSignupPage(page)
-
-  await signupPage.open()
-  await signupPage.register({ ...user, email: 'teste' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, email: 'teste' })
+  await auth.submitSignupForm()
 
   // Verifica se o campo de email tem o tipo correto
-  await signupPage.getAttributeTypeEmail()
+  await auth.validateEmailFieldType()
 })
 
 test('deve validar quando username for muito curto', async ({ page }) => {
-
-  const signupPage = getSignupPage(page)
+  const auth = getAuthActions(page)
   const toast = getToast(page)
 
-  await signupPage.open()
-  await signupPage.register({ ...user, username: 'a' })
-  await signupPage.submit()
+  await auth.navigateToSignup()
+  await auth.fillSignupForm({ ...user, username: 'a' })
+  await auth.submitSignupForm()
 
-  expect(await toast.getMessage())
-    .toContain('Username muito curtoO username deve ter pelo menos 3 caracteres.')
+  await toast.getMessage('O username deve ter pelo menos 3 caracteres.')
 })

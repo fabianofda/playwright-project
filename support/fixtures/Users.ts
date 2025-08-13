@@ -42,3 +42,15 @@ export function getLoginUser() {
         confirmapassword: password
     }
 }
+export function getTempUser() {
+    const password = 'fda123'
+
+    return {
+        name: 'andrade',
+        username: 'andrade',
+        email: 'andrade@link.ai',
+        password: password,
+        confirmapassword: password
+    }
+
+}
