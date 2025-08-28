@@ -4,7 +4,14 @@ export interface User {
     username: string
     email: string
     password: string
-    confirmapassword: string
+    confirmapassword: string,
+    links?: Link[]
+
+}
+
+export interface Link {
+    title: string
+    url: string
 }
 
 export function getNewUser() {
@@ -42,7 +49,8 @@ export function getLoginUser() {
         confirmapassword: password
     }
 }
-export function getTempUser() {
+
+export function getUserWithLink() {
     const password = 'fda123'
 
     return {
@@ -50,7 +58,50 @@ export function getTempUser() {
         username: 'andrade',
         email: 'andrade@link.ai',
         password: password,
-        confirmapassword: password
+        confirmapassword: password,
+        links: [{
+            title: 'meu projeto',
+            url: 'https://andrade.dev/lnks'
+        }]
+    }
+
+}
+
+export function getUserWithLinks() {
+    const password = 'fda123'
+
+    return {
+        name: 'dias',
+        username: 'dias',
+        email: 'dias@link.ai',
+        password: password,
+        confirmapassword: password,
+        links: [
+            { title: 'meu projeto', url: 'https://dias.dev/lnks' },
+            { title: 'meu blog', url: 'https://dias.dev/blog' },
+            { title: 'meu instagran', url: 'https://dias.dev/instagran' },
+            { title: 'meu github', url: 'https://dias.dev/github' },
+            { title: 'meu twitter', url: 'https://dias.dev/twitter' },
+        ]
+    }
+
+}
+
+export function getUserWithSocialMedia() {
+    const password = 'fda123'
+
+    return {
+        name: 'lucy',
+        username: 'lucy',
+        email: 'lucy@link.ai',
+        password: password,
+        confirmapassword: password,
+        socialMedia:
+        {
+            gitHub: 'lucy',
+            linkedIn: 'lucy',
+            instagram: 'lucy'
+        }
     }
 
 }
